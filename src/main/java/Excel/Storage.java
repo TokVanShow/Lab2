@@ -7,6 +7,7 @@ public class Storage {
 
     private ArrayList<ArrayList<Double>> excelLists;
     private Stat_Calc calculationStrategy;
+    private double[] results;
 
     public Storage() {
         this.excelLists = new ArrayList<>();
@@ -32,11 +33,19 @@ public class Storage {
             samples[i] = excelLists.get(i);
         }
 
-        double[] results = calculationStrategy.stat_Calc(samples);
+        results = calculationStrategy.stat_Calc(samples);
         System.out.println("Calculated results: ");
         for (double result : results) {
-            System.out.println(calculationStrategy.toString());
             System.out.println(result);
         }
+    }
+
+    // Добавленные методы
+    public ArrayList<ArrayList<Double>> getExcelLists() {
+        return excelLists;
+    }
+
+    public double[] getResults() {
+        return results;
     }
 }

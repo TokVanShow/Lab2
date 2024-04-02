@@ -2,11 +2,13 @@ Main\MainFrame.class
 calculations\Geometric_Mean_Calculator.class
 calculations\Standard_Deviation_Calculator.class
 Main\MainFrame$4.class
-calculations\Stat_Calc.class
+Main\MainFrame$5.class
 Main\Lab2.class
-Main\MainFrame$2.class
 Excel\ExcelReader.class
 Main\MainFrame$3.class
 Excel\Storage.class
+calculations\Stat_Calc.class
+Main\MainFrame$2.class
+Excel\ExcelExport.class
 calculations\Arithmetic_Mean_Calculator.class
 Main\MainFrame$1.class
