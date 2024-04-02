@@ -49,7 +49,7 @@ public class ExcelReader {
             Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-public void readFile() {
+public List readFile() {
     XSSFSheet sheet = workbook.getSheetAt(0); // Выбираем первый лист
 
     List<Double> column1 = new ArrayList<>();
@@ -88,5 +88,6 @@ public void readFile() {
     System.out.println("Столбец 1: " + column1.toString());
     System.out.println("Столбец 2: " + column2.toString());
     System.out.println("Столбец 3: " + column3.toString());
+    return(column1);
 }
 }

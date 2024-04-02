@@ -34,7 +34,7 @@ public class Lab2 {
         java.awt.EventQueue.invokeLater(() -> {
             new MainFrame().setVisible(true);
         });
-    
+        
         ExcelReader excel = new ExcelReader("src\\main\\java\\Excel\\ДЗ4.xlsx");
         excel.run();
     }
