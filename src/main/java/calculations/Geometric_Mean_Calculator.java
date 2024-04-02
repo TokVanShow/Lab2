@@ -1,6 +1,7 @@
 package calculations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
 public class Geometric_Mean_Calculator implements Stat_Calc {
@@ -14,7 +15,7 @@ public class Geometric_Mean_Calculator implements Stat_Calc {
             double[] values = samples[i].stream().mapToDouble(Double::doubleValue).toArray();
             results[i] = geometricMean.evaluate(values);
         }
-        
+        System.out.println("Геометрическое среднее= " + Arrays.toString(results));
         return results;
     }
 }

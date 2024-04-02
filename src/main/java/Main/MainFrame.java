@@ -1,8 +1,16 @@
 package Main;
 
 import Excel.ExcelReader;
+import Excel.Storage;
+import calculations.Arithmetic_Mean_Calculator;
+import calculations.Geometric_Mean_Calculator;
+import calculations.Standard_Deviation_Calculator;
+import calculations.Stat_Calc;
+import java.util.ArrayList;
 
 public class MainFrame extends javax.swing.JFrame {
+
+    Storage storage = new Storage();
 
     public MainFrame() {
         initComponents();
@@ -79,7 +87,15 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
-
+        Stat_Calc geometric_Mean_Calculator = new Geometric_Mean_Calculator();
+        Stat_Calc arithetic_Mean_Calculator = new Arithmetic_Mean_Calculator();
+        Stat_Calc stand_Deviation_Calculator = new Standard_Deviation_Calculator();
+        storage.setStatCalc(geometric_Mean_Calculator);
+        storage.performCalculations();
+        storage.setStatCalc(arithetic_Mean_Calculator);
+        storage.performCalculations();
+        storage.setStatCalc(stand_Deviation_Calculator);
+        storage.performCalculations();
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
@@ -87,7 +103,9 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_exportButtonActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        new ExcelReader("src\\main\\java\\Excel\\ДЗ4.xlsx").run();
+        ExcelReader excelReader = new ExcelReader("src\\main\\java\\Excel\\ДЗ4.xlsx");
+        excelReader.run(storage);
+
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void showButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showButtonActionPerformed

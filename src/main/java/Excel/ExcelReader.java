@@ -35,9 +35,9 @@ public class ExcelReader {
 
     }
 
-    public void run() {
+    public void run(Storage storage) {
         loadFile();
-        readFile();
+        storage.setExcelLists(readFile());
         close();
     }
 

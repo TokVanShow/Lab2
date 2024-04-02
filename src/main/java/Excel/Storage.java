@@ -35,6 +35,7 @@ public class Storage {
         double[] results = calculationStrategy.stat_Calc(samples);
         System.out.println("Calculated results: ");
         for (double result : results) {
+            System.out.println(calculationStrategy.toString());
             System.out.println(result);
         }
     }
