@@ -5,13 +5,20 @@ import java.util.ArrayList;
 
 public class Storage {
 
-    private ArrayList<ArrayList<Double>> excelLists;
+    public ArrayList<ArrayList<Double>> excelLists;
     private Stat_Calc calculationStrategy;
-    private double[] results;
+    private ArrayList<Double> calculationResults;
+    private ArrayList<ArrayList<ArrayList<Double>>> savedResults = new ArrayList<>();
 
     public Storage() {
         this.excelLists = new ArrayList<>();
         this.calculationStrategy = null;
+        this.calculationResults = new ArrayList<>();
+        this.savedResults = new ArrayList<>();
+    }
+
+    public ArrayList<ArrayList<Double>> getExcelLists() {
+        return excelLists;
     }
 
     public void setExcelLists(ArrayList<ArrayList<Double>> excelLists) {
@@ -29,23 +36,54 @@ public class Storage {
         }
 
         ArrayList<Double>[] samples = new ArrayList[excelLists.size()];
+
         for (int i = 0; i < excelLists.size(); i++) {
             samples[i] = excelLists.get(i);
         }
 
-        results = calculationStrategy.stat_Calc(samples);
+        double[] currentResults = calculationStrategy.stat_Calc(samples);
+
+        for (double result : currentResults) {
+            calculationResults.add(result);
+        }
+
         System.out.println("Calculated results: ");
-        for (double result : results) {
+        for (double result : currentResults) {
+            System.out.print(calculationStrategy);
             System.out.println(result);
         }
     }
 
-    // Добавленные методы
-    public ArrayList<ArrayList<Double>> getExcelLists() {
-        return excelLists;
+    public ArrayList<Double> getCalculationResults() {
+        return calculationResults;
     }
 
-    public double[] getResults() {
-        return results;
+    public void saveResults(int calculationType, int sampleIndex, ArrayList<Double> results) {
+        while (savedResults.size() <= sampleIndex) {
+            savedResults.add(new ArrayList<>());
+        }
+
+        while (savedResults.get(sampleIndex).size() <= calculationType) {
+            savedResults.get(sampleIndex).add(new ArrayList<>());
+        }
+
+        savedResults.get(sampleIndex).set(calculationType, results);
     }
+
+public ArrayList<Double> getSavedResults(String type, int sampleIndex) {
+    if (sampleIndex < savedResults.size() && sampleIndex >= 0) {
+        ArrayList<ArrayList<Double>> sampleResults = savedResults.get(sampleIndex);
+
+        if (type.equals("Geometric Mean")) {
+            return sampleResults.get(0);
+        } else if (type.equals("Arithmetic Mean")) {
+            return sampleResults.get(1);
+        } else if (type.equals("Standard Deviation")) {
+            return sampleResults.get(2);
+        }
+    }
+    return new ArrayList<>();
 }
+
+}
+

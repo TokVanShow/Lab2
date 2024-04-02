@@ -113,7 +113,8 @@ public class MainFrame extends javax.swing.JFrame {
         storage.setStatCalc(arithetic_Mean_Calculator);
         storage.performCalculations();
         storage.setStatCalc(stand_Deviation_Calculator);
-        storage.performCalculations();
+        System.out.println(storage.excelLists.get(0).size());
+        
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
