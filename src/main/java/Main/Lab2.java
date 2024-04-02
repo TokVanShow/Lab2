@@ -1,9 +1,5 @@
 package Main;
 
-
-import Excel.ExcelReader;
-
-
 public class Lab2 {
 
     public static void main(String[] args) {
@@ -29,13 +25,10 @@ public class Lab2 {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             new MainFrame().setVisible(true);
         });
-        
-        ExcelReader excel = new ExcelReader("src\\main\\java\\Excel\\ДЗ4.xlsx");
-        excel.run();
     }
 }

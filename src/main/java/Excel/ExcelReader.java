@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -49,45 +48,38 @@ public class ExcelReader {
             Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-public List readFile() {
-    XSSFSheet sheet = workbook.getSheetAt(0); // Выбираем первый лист
 
-    List<Double> column1 = new ArrayList<>();
-    List<Double> column2 = new ArrayList<>();
-    List<Double> column3 = new ArrayList<>();
+    public ArrayList<ArrayList<Double>> readFile() {
+        XSSFSheet sheet = workbook.getSheetAt(0); // Выбираем первый лист
 
-    Iterator<Row> rowIterator = sheet.iterator();
-    rowIterator.next(); // Пропускаем заголовок
+        ArrayList<ArrayList<Double>> columns = new ArrayList<>();
 
-    while (rowIterator.hasNext()) {
-        Row row = rowIterator.next();
-        
-        Cell cell1 = row.getCell(0);
-        Cell cell2 = row.getCell(1);
-        Cell cell3 = row.getCell(2);
+        Iterator<Row> rowIterator = sheet.iterator();
+        rowIterator.next(); // Пропускаем заголовок
 
-        if (cell1 != null && cell1.getCellType() == CellType.NUMERIC) {
-            column1.add(cell1.getNumericCellValue());
-        } else {
-            column1.add(0.0); // Добавляем 0, если значение не числовое
+        while (rowIterator.hasNext()) {
+            Row row = rowIterator.next();
+
+            for (int i = 0; i < row.getLastCellNum(); i++) {
+                Cell cell = row.getCell(i);
+                if (cell != null && cell.getCellType() == CellType.NUMERIC) {
+                    if (columns.size() <= i) {
+                        columns.add(new ArrayList<>());
+                    }
+                    columns.get(i).add(cell.getNumericCellValue());
+                } else {
+                    if (columns.size() <= i) {
+                        columns.add(new ArrayList<>());
+                    }
+                    columns.get(i).add(0.0); // Добавляем 0, если значение не числовое
+                }
+            }
         }
 
-        if (cell2 != null && cell2.getCellType() == CellType.NUMERIC) {
-            column2.add(cell2.getNumericCellValue());
-        } else {
-            column2.add(0.0);
+        for (int j = 0; j < columns.size(); j++) {
+            System.out.println("Столбец " + (j + 1) + ": " + columns.get(j).toString());
         }
 
-        if (cell3 != null && cell3.getCellType() == CellType.NUMERIC) {
-            column3.add(cell3.getNumericCellValue());
-        } else {
-            column3.add(0.0);
-        }
+        return columns;
     }
-
-    System.out.println("Столбец 1: " + column1.toString());
-    System.out.println("Столбец 2: " + column2.toString());
-    System.out.println("Столбец 3: " + column3.toString());
-    return(column1);
-}
 }
