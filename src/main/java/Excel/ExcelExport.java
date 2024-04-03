@@ -18,29 +18,28 @@ public class ExcelExport {
         String[] calculationTypes = {"Geometric Mean", "Arithmetic Mean", "Standard Deviation"};
         int rowNum = 0;
 
-        // Сначала создадим заголовок с названиями выборок
+        // Create the header with sample names
         Row headerRow = sheet.createRow(rowNum++);
         Cell headerCell = headerRow.createCell(0);
         headerCell.setCellValue("Samples");
+
         for (int j = 0; j < excelLists.size(); j++) {
             headerCell = headerRow.createCell(j + 1);
             headerCell.setCellValue("Sample_" + (j + 1));
         }
 
-        // Затем заполним таблицу с результатами калькуляций
+        // Fill the table with calculation results
         for (String type : calculationTypes) {
             Row row = sheet.createRow(rowNum++);
             Cell cell = row.createCell(0);
             cell.setCellValue(type);
 
-            for (int j = 0; j < excelLists.size(); j++) {
-                ArrayList<Double> results = storage.getSavedResults(type, j);
+            ArrayList<Double> results = storage.getSavedResults(type);
 
-                cell = row.createCell(j + 1);
-                if (!results.isEmpty()) {
-                    cell.setCellValue(results.get(0)); // Для примера, здесь используется только первое значение
-                } else {
-                    cell.setCellValue("N/A"); // Записываем пустую ячейку, если результат отсутствует
+            for (int j = 0; j < excelLists.size(); j++) {
+                if (j < results.size()) {
+                    cell = row.createCell(j + 1);
+                    cell.setCellValue(results.get(j));
                 }
             }
         }
@@ -56,6 +55,5 @@ public class ExcelExport {
                 e.printStackTrace();
             }
         }
-
     }
 }

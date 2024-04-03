@@ -1,14 +1,10 @@
 package Main;
 
+import calculations.*;
 import Excel.ExcelExport;
 import Excel.ExcelReader;
 import Excel.Storage;
-import calculations.Arithmetic_Mean_Calculator;
-import calculations.Geometric_Mean_Calculator;
-import calculations.Standard_Deviation_Calculator;
-import calculations.Stat_Calc;
 import static java.lang.System.exit;
-import java.util.ArrayList;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -105,22 +101,30 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
-        Stat_Calc geometric_Mean_Calculator = new Geometric_Mean_Calculator();
-        Stat_Calc arithetic_Mean_Calculator = new Arithmetic_Mean_Calculator();
-        Stat_Calc stand_Deviation_Calculator = new Standard_Deviation_Calculator();
-        storage.setStatCalc(geometric_Mean_Calculator);
-        storage.performCalculations();
-        storage.setStatCalc(arithetic_Mean_Calculator);
-        storage.performCalculations();
-        storage.setStatCalc(stand_Deviation_Calculator);
-        System.out.println(storage.excelLists.get(0).size());
-        
+
+        Stat_Calc[] calculators = {
+            new Geometric_Mean_Calculator(),
+            new Arithmetic_Mean_Calculator(),
+            new Standard_Deviation_Calculator(),
+            new Range_Calculator(),
+            new Covariance_Calculator(),
+            new Elements_Count_Calculator(),
+            new Variation_Calculator(),
+            new Confidence_Interval_Calculator(),
+            new Variance_Calculator(),
+            new Extremum_Calculator()
+        };
+
+        for (Stat_Calc calculator : calculators) {
+            storage.setStatCalc(calculator);
+            storage.performCalculations();
+        }
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
         String filePath = "src\\main\\java\\Excel\\Results.xlsx";
         ExcelExport.exportToExcel(storage, filePath);
-        
+
     }//GEN-LAST:event_exportButtonActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed

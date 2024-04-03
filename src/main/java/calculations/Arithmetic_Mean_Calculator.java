@@ -16,6 +16,7 @@ public class Arithmetic_Mean_Calculator implements Stat_Calc {
             }
             results[i] = descriptiveStatistics.getMean();
         }
+        System.out.println("Среднее арифметическое для каждой выборки: " + java.util.Arrays.toString(results));
         return results;
     }
 }

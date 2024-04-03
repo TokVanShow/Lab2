@@ -19,6 +19,7 @@ public class Standard_Deviation_Calculator implements Stat_Calc {
             }
             results[i] = descriptiveStatistics.getStandardDeviation();
         }
+        System.out.println("Стандартное отклонение для каждой выборки: " + java.util.Arrays.toString(results));
         return results;
     }
 }
