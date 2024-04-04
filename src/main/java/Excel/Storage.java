@@ -47,7 +47,7 @@ public class Storage {
         for (double result : currentResults) {
             calculationResults.add(result);
         }
-        System.out.println("Calculated results: ");
+        System.out.println("");
         for (double result : currentResults) {
 //            System.out.print(calculationStrategy);
 //            System.out.println(result);

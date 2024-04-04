@@ -122,8 +122,8 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
-        String filePath = "src\\main\\java\\Excel\\Results.xlsx";
-        ExcelExport.exportToExcel(storage, filePath);
+    String filePath = "src\\main\\java\\Excel\\Results.xlsx";
+    ExcelExport.exportToExcel(storage, filePath);
 
     }//GEN-LAST:event_exportButtonActionPerformed
 

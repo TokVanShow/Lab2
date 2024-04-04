@@ -1,59 +1,58 @@
 package Excel;
 
-import java.io.FileOutputStream;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import calculations.Covariance_Calculator;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import java.io.IOException;
+import calculations.Stat_Calc;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ExcelExport {
+    
+    public static void exportToExcel(Storage storage, String filePath) {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet calculationResultsSheet = workbook.createSheet("Calculations Results");
+            Sheet covarianceMatrixSheet = workbook.createSheet("Covariance Matrix");
 
-    public static void exportToExcel(Storage storage, String path) {
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("Calculation Results");
+            ArrayList<Double> calculationResults = storage.getCalculationResults();
+            ArrayList<ArrayList<Double>> excelLists = storage.getExcelLists();
 
-        ArrayList<ArrayList<Double>> excelLists = storage.getExcelLists();
-        String[] calculationTypes = {"Geometric Mean", "Arithmetic Mean", "Standard Deviation"};
-        int rowNum = 0;
+            // Write calculation results to the first sheet
+            int rownum = 0;
+            for (double result : calculationResults) {
+                Row row = calculationResultsSheet.createRow(rownum++);
+                Cell cell = row.createCell(0);
+                cell.setCellValue(result);
+            }
 
-        // Create the header with sample names
-        Row headerRow = sheet.createRow(rowNum++);
-        Cell headerCell = headerRow.createCell(0);
-        headerCell.setCellValue("Samples");
+            // Write covariance matrix to the second sheet
+            Stat_Calc covarianceCalculator = new Covariance_Calculator();
+            double[] covarianceValues = covarianceCalculator.stat_Calc(excelLists.toArray(new ArrayList[0]));
 
-        for (int j = 0; j < excelLists.size(); j++) {
-            headerCell = headerRow.createCell(j + 1);
-            headerCell.setCellValue("Sample_" + (j + 1));
-        }
+            int matrixSize = (int) Math.sqrt(covarianceValues.length); // Calculate the size of covariance matrix dynamically
 
-        // Fill the table with calculation results
-        for (String type : calculationTypes) {
-            Row row = sheet.createRow(rowNum++);
-            Cell cell = row.createCell(0);
-            cell.setCellValue(type);
-
-            ArrayList<Double> results = storage.getSavedResults(type);
-
-            for (int j = 0; j < excelLists.size(); j++) {
-                if (j < results.size()) {
-                    cell = row.createCell(j + 1);
-                    cell.setCellValue(results.get(j));
+            for (int i = 0; i < matrixSize; i++) {
+                Row row = covarianceMatrixSheet.createRow(i);
+                for (int j = 0; j < matrixSize; j++) {
+                    Cell cell = row.createCell(j);
+                    cell.setCellValue(covarianceValues[i * matrixSize + j]);
                 }
             }
-        }
 
-        try (FileOutputStream fileOut = new FileOutputStream(path)) {
-            workbook.write(fileOut);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                workbook.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            // Auto-size columns for better appearance
+            for (int i = 0; i < matrixSize; i++) {
+                covarianceMatrixSheet.autoSizeColumn(i);
             }
+
+            // Write the Excel file
+            try (FileOutputStream fileOut = new FileOutputStream(new File(filePath))) {
+                workbook.write(fileOut);
+            }
+            System.out.println("Excel file exported successfully!");
+        } catch (IOException e) {
+            System.err.println("Error exporting Excel file: " + e.getMessage());
         }
     }
 }

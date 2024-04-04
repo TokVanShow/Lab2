@@ -79,7 +79,7 @@ public class ExcelReader {
         for (int j = 0; j < columns.size(); j++) {
             System.out.println("Столбец " + (j + 1) + ": " + columns.get(j).toString());
         }
-
+        System.out.println("");
         return columns;
     }
 }
