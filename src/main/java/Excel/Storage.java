@@ -2,20 +2,19 @@ package Excel;
 
 import calculations.Stat_Calc;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 
 public class Storage {
 
     public ArrayList<ArrayList<Double>> excelLists;
     private Stat_Calc calculationStrategy;
-    private ArrayList<Double> calculationResults;
-  private HashMap<String, ArrayList<Double>> savedResults; 
+    private final ArrayList<Double> calculationResults;
 
     public Storage() {
         this.excelLists = new ArrayList<>();
         this.calculationStrategy = null;
         this.calculationResults = new ArrayList<>();
-        this.savedResults = new HashMap<>();
+
     }
 
     public ArrayList<ArrayList<Double>> getExcelLists() {
@@ -48,24 +47,11 @@ public class Storage {
             calculationResults.add(result);
         }
         System.out.println("");
-        for (double result : currentResults) {
-//            System.out.print(calculationStrategy);
-//            System.out.println(result);
-            
+        for (double result : currentResults) {   
         }
     }
 
     public ArrayList<Double> getCalculationResults() {
         return calculationResults;
     }
-
-public void saveResults(String calculationType, ArrayList<Double> results) {
-    savedResults.put(calculationType, results);
 }
-
-public ArrayList<Double> getSavedResults(String calculationType) {
-    return savedResults.getOrDefault(calculationType, new ArrayList<>());
-}
-
-}
-

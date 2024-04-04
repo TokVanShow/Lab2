@@ -107,12 +107,12 @@ public class MainFrame extends javax.swing.JFrame {
             new Arithmetic_Mean_Calculator(),
             new Standard_Deviation_Calculator(),
             new Range_Calculator(),
-            new Covariance_Calculator(),
             new Elements_Count_Calculator(),
             new Variation_Calculator(),
             new Confidence_Interval_Calculator(),
             new Variance_Calculator(),
-            new Extremum_Calculator()
+            new Extremum_Calculator(), 
+          //new Covariance_Calculator()
         };
 
         for (Stat_Calc calculator : calculators) {
@@ -122,8 +122,9 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
-    String filePath = "src\\main\\java\\Excel\\Results.xlsx";
-    ExcelExport.exportToExcel(storage, filePath);
+        String filePath = "src\\main\\java\\Excel\\Results.xlsx";
+        ExcelExport excelExport = new ExcelExport(storage);  // Создание экземпляра ExcelExport
+        excelExport.exportToExcel(filePath);  // Вызов метода exportToExcel через созданный экземпляр
 
     }//GEN-LAST:event_exportButtonActionPerformed
 
