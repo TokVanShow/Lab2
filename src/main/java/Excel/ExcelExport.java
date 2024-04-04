@@ -48,7 +48,8 @@ public class ExcelExport {
         }
 
         // Writing method names in the first column starting from the second row
-        String[] methodNames = {"Method1", "Method2", "Method3", "Method4", "Method5", "Method6", "Method7", "Method8", "Method9", "Method10"};
+        String[] methodNames = {"Geometric_Mean", "Arithmetic_Mean", "Standard_Deviation", "Range",
+            "Elements_Count", "Variation", "Confidence_Interval", "Variance", "Min", "Max"};
         for (int j = 0; j < methodNames.length; j++) {
             Row row = sheet.createRow(j + 1);
             Cell methodCell = row.createCell(0);
@@ -62,6 +63,10 @@ public class ExcelExport {
                 }
             }
         }
+        sheet.setColumnWidth(0, 5000); // Ширина первого столбца (200 пикселей)
+        sheet.setColumnWidth(1, 3000); // Ширина второго столбца (130 пикселей)
+        sheet.setColumnWidth(2, 3000); // Ширина третьего столбца (130 пикселей)
+        sheet.setColumnWidth(3, 3000); // Ширина четвертого столбца (130 пикселей)
     }
 
     private void writeCovarianceMatrixToSheet(Stat_Calc covarianceCalculator, Sheet sheet) {
