@@ -4,7 +4,11 @@ import calculations.*;
 import Excel.ExcelExport;
 import Excel.ExcelReader;
 import Excel.Storage;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import static java.lang.System.exit;
+
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -111,8 +115,7 @@ public class MainFrame extends javax.swing.JFrame {
             new Variation_Calculator(),
             new Confidence_Interval_Calculator(),
             new Variance_Calculator(),
-            new Extremum_Calculator(), 
-          //new Covariance_Calculator()
+            new Extremum_Calculator(), //new Covariance_Calculator()
         };
 
         for (Stat_Calc calculator : calculators) {
@@ -135,7 +138,21 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void showButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showButtonActionPerformed
-        // TODO add your handling code here:
+                                         
+    try {
+        File file = new File("src\\main\\java\\Excel\\Results.xlsx");
+        if (file.exists()) {
+            Desktop.getDesktop().open(file);
+        } else {
+            System.out.println("Файл не найден");
+        }
+    } catch (IOException e) {
+        System.out.println("Ошибка при открытии файла: " + e.getMessage());
+    } catch (IllegalArgumentException e) {
+        System.out.println("Некорректный аргумент: " + e.getMessage());
+    } catch (UnsupportedOperationException e) {
+        System.out.println("Операция не поддерживается: " + e.getMessage());
+    }
     }//GEN-LAST:event_showButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed

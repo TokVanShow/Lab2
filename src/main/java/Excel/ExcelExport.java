@@ -40,14 +40,14 @@ public class ExcelExport {
     }
 
     public void writeResultsToFirstSheet(Sheet sheet) {
-        // Writing sample names in the first row starting from the second cell
+
         Row firstRow = sheet.createRow(0);
         for (int i = 0; i < excelLists.size(); i++) {
             Cell cell = firstRow.createCell(i + 1);
             cell.setCellValue("Sample_" + (i + 1));
         }
 
-        // Writing method names in the first column starting from the second row
+
         String[] methodNames = {"Geometric_Mean", "Arithmetic_Mean", "Standard_Deviation", "Range",
             "Elements_Count", "Variation", "Confidence_Interval", "Variance", "Min", "Max"};
         for (int j = 0; j < methodNames.length; j++) {
@@ -55,7 +55,7 @@ public class ExcelExport {
             Cell methodCell = row.createCell(0);
             methodCell.setCellValue(methodNames[j]);
 
-            // Writing calculation results in each row starting from the second cell
+
             for (int k = 0; k < excelLists.size(); k++) {
                 Cell valueCell = row.createCell(k + 1);
                 if (j * excelLists.size() + k < calculationResults.size()) {
@@ -74,7 +74,7 @@ public class ExcelExport {
             double[] covarianceValues = covarianceCalculator.stat_Calc(excelLists.toArray(ArrayList[]::new));
             int matrixSize = (int) Math.sqrt(covarianceValues.length);
 
-            // Add row and column labels for sample names
+
             Row firstRow = sheet.createRow(0);
             firstRow.createCell(0); // empty cell in the top-left corner
             for (int i = 0; i < matrixSize; i++) {

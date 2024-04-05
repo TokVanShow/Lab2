@@ -14,7 +14,7 @@ public class Variation_Calculator implements Stat_Calc {
             for (Double num : samples[i]) {
                 descriptiveStatistics.addValue(num);
             }
-            coefficients[i] = descriptiveStatistics.getStandardDeviation() / descriptiveStatistics.getMean() * 100.0;
+            coefficients[i] = descriptiveStatistics.getStandardDeviation() / descriptiveStatistics.getMean();
         }
 
         System.out.println("Коэффициенты вариации для каждой выборки: " + java.util.Arrays.toString(coefficients));

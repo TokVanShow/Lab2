@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -26,26 +24,27 @@ public class ExcelReader {
         this.file = new File(path);
     }
 
-    public void loadFile() {
-        try {
-            workbook = new XSSFWorkbook(file);
-        } catch (IOException | InvalidFormatException ex) {
-            Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+    public void loadFile() throws IOException, InvalidFormatException {
+        this.workbook = new XSSFWorkbook(file);
     }
 
     public void run(Storage storage) {
-        loadFile();
-        storage.setExcelLists(readFile());
-        close();
+        try {
+            loadFile();
+            storage.setExcelLists(readFile());
+            close();
+        } catch (IOException | InvalidFormatException e) {
+            System.err.println("Error processing Excel file: " + e.getMessage());
+        }
     }
 
     private void close() {
         try {
-            workbook.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
+            if (workbook != null) {
+                workbook.close();
+            }
+        } catch (IOException e) {
+            System.err.println("Error closing Excel file: " + e.getMessage());
         }
     }
 
@@ -55,7 +54,12 @@ public class ExcelReader {
         ArrayList<ArrayList<Double>> columns = new ArrayList<>();
 
         Iterator<Row> rowIterator = sheet.iterator();
-        rowIterator.next(); // Пропускаем заголовок
+        if (rowIterator.hasNext()) {
+            rowIterator.next(); // Пропускаем заголовок
+        } else {
+            System.out.println("The Excel file is empty");
+            return columns;
+        }
 
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
