@@ -14,7 +14,6 @@ public class Storage {
         this.excelLists = new ArrayList<>();
         this.calculationStrategy = null;
         this.calculationResults = new ArrayList<>();
-
     }
 
     public ArrayList<ArrayList<Double>> getExcelLists() {
@@ -47,8 +46,6 @@ public class Storage {
             calculationResults.add(result);
         }
         System.out.println("");
-        for (double result : currentResults) {   
-        }
     }
 
     public ArrayList<Double> getCalculationResults() {

@@ -21,7 +21,7 @@ public class Covariance_Calculator implements Stat_Calc {
                 covariances[index++] = covarianceValue;
 
 
-                System.out.println("Ковариация между выборками " + i + " и " + j + ": " + covarianceValue);
+                System.out.println("Ковариация между выборками " + (i+1) + " и " + (j+1) + ": " + covarianceValue);
             }
         }
         return covariances;

@@ -17,5 +17,6 @@ calculations\Variation_Calculator.class
 Excel\ExcelExport.class
 calculations\Range_Calculator.class
 calculations\Arithmetic_Mean_Calculator.class
+Main\Manager.class
 calculations\Variance_Calculator.class
 Main\MainFrame$1.class

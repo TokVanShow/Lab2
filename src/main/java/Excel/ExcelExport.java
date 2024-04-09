@@ -40,13 +40,12 @@ public class ExcelExport {
     }
 
     public void writeResultsToFirstSheet(Sheet sheet) {
-
         Row firstRow = sheet.createRow(0);
         for (int i = 0; i < excelLists.size(); i++) {
+            System.out.println("excelLists = " + excelLists);
             Cell cell = firstRow.createCell(i + 1);
             cell.setCellValue("Sample_" + (i + 1));
         }
-
 
         String[] methodNames = {"Geometric_Mean", "Arithmetic_Mean", "Standard_Deviation", "Range",
             "Elements_Count", "Variation", "Confidence_Interval", "Variance", "Min", "Max"};
@@ -54,7 +53,6 @@ public class ExcelExport {
             Row row = sheet.createRow(j + 1);
             Cell methodCell = row.createCell(0);
             methodCell.setCellValue(methodNames[j]);
-
 
             for (int k = 0; k < excelLists.size(); k++) {
                 Cell valueCell = row.createCell(k + 1);
@@ -73,7 +71,6 @@ public class ExcelExport {
         {
             double[] covarianceValues = covarianceCalculator.stat_Calc(excelLists.toArray(ArrayList[]::new));
             int matrixSize = (int) Math.sqrt(covarianceValues.length);
-
 
             Row firstRow = sheet.createRow(0);
             firstRow.createCell(0); // empty cell in the top-left corner

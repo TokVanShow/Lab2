@@ -16,11 +16,8 @@ public class ExcelReader {
     private File file;
     private XSSFWorkbook workbook;
 
-    public ExcelReader(String path) {
-        setFile(path);
-    }
 
-    private void setFile(String path) {
+    public void setFile(String path) {
         this.file = new File(path);
     }
 
