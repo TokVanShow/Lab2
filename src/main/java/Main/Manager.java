@@ -13,11 +13,11 @@ public class Manager {
 
     private final Storage storage;
     private final ExcelReader excelReader;
-
+    private String selectedFilePath; // New class variable to store the selected file path
 
     public Manager() {
         this.storage = new Storage();
-        this.excelReader = new ExcelReader(); 
+        this.excelReader = new ExcelReader();
     }
 
     public void performCalculations() {
@@ -47,28 +47,35 @@ public class Manager {
         } catch (IOException | InvalidFormatException e) {
             System.err.println("Error processing Excel file: " + e.getMessage());
         }
-    
+
     }
 
     public void exportToExcel(String filePath) {
         ExcelExport excelExport = new ExcelExport(storage);
         excelExport.exportToExcel(filePath);
+        // Store the selected file path for use in showResultsFile
+        selectedFilePath = filePath;
     }
 
-    public void showResultsFile(String filePath) {
-        File file = new File(filePath);
-        try {
-            if (file.exists()) {
-                Desktop.getDesktop().open(file);
-            } else {
-                System.out.println("Файл не найден");
+    public void showResultsFile() {
+        if (selectedFilePath != null && !selectedFilePath.isEmpty()) {
+            File file = new File(selectedFilePath);
+            try {
+                if (file.exists()) {
+                    Desktop.getDesktop().open(file);
+                } else {
+                    System.out.println("Файл не найден");
+                }
+            } catch (IOException e) {
+                System.out.println("Ошибка при открытии файла: " + e.getMessage());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Некорректный аргумент: " + e.getMessage());
+            } catch (UnsupportedOperationException e) {
+                System.out.println("Операция не поддерживается: " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println("Ошибка при открытии файла: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Некорректный аргумент: " + e.getMessage());
-        } catch (UnsupportedOperationException e) {
-            System.out.println("Операция не поддерживается: " + e.getMessage());
+        } else {
+            System.out.println("Файл не был выбран для экспорта");
         }
     }
+
 }

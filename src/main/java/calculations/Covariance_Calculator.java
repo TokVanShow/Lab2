@@ -17,9 +17,8 @@ public class Covariance_Calculator implements Stat_Calc {
                 double[] values1 = samples[i].stream().mapToDouble(Double::doubleValue).toArray();
                 double[] values2 = samples[j].stream().mapToDouble(Double::doubleValue).toArray();
                 double covarianceValue = covariance.covariance(values1, values2);
-
+                
                 covariances[index++] = covarianceValue;
-
 
                 System.out.println("Ковариация между выборками " + (i+1) + " и " + (j+1) + ": " + covarianceValue);
             }

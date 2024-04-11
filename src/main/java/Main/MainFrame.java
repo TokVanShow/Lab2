@@ -105,8 +105,18 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
-        String filePath = "src\\main\\java\\Excel\\Results.xlsx";
-        manager.exportToExcel(filePath);
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+            // Ensure the file extension is .xlsx
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+            }
+            manager.exportToExcel(filePath);
+        } else {
+            System.out.println("Отменено");
+        }
 
     }//GEN-LAST:event_exportButtonActionPerformed
 
@@ -123,8 +133,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void showButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showButtonActionPerformed
-        String filePath = "src\\main\\java\\Excel\\Results.xlsx";
-        manager.showResultsFile(filePath);
+        manager.showResultsFile();
     }//GEN-LAST:event_showButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
