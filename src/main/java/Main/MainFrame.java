@@ -2,28 +2,36 @@ package Main;
 
 import java.io.File;
 import static java.lang.System.exit;
+import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 
 public class MainFrame extends javax.swing.JFrame {
 
     JFileChooser fileChooser;
     private final Manager manager;
+    private ButtonGroup radioGroup;
 
     public MainFrame() {
         initComponents();
         fileChooser = new JFileChooser();
         manager = new Manager();
+        radioGroup = new ButtonGroup();
+        radioGroup.add(radioIndex);
+        radioGroup.add(radioName);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         loadButton = new javax.swing.JButton();
         calculateButton = new javax.swing.JButton();
         exportButton = new javax.swing.JButton();
         showButton = new javax.swing.JButton();
         exitButton = new javax.swing.JButton();
+        radioIndex = new javax.swing.JRadioButton();
+        radioName = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,6 +70,20 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        radioIndex.setText("По индексу листа");
+        radioIndex.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioIndexActionPerformed(evt);
+            }
+        });
+
+        radioName.setText("По имени листа");
+        radioName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioNameActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -76,16 +98,26 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(calculateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(loadButton)
-                            .addComponent(exportButton))
+                            .addComponent(exportButton)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(loadButton)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(radioName)
+                                    .addComponent(radioIndex))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(radioIndex)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(radioName)))
                 .addGap(18, 18, 18)
                 .addComponent(calculateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -94,7 +126,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(showButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         pack();
@@ -124,12 +156,21 @@ public class MainFrame extends javax.swing.JFrame {
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            manager.loadExcelFile(selectedFile.getAbsolutePath());
-            System.out.println("Выбранный файл: " + selectedFile.getAbsolutePath());
+            String selectedFilePath = selectedFile.getAbsolutePath();
+            if (radioIndex.isSelected()) {
+                String input = javax.swing.JOptionPane.showInputDialog("Введите индекс листа:");
+                int sheetIndex = Integer.parseInt(input);
+                manager.loadExcelSheetByIndex(selectedFilePath, sheetIndex);
+                System.out.println("Выбранный файл: " + selectedFilePath + ", индекс листа: " + sheetIndex);
+            }
+            if (radioName.isSelected()) {
+                String sheetName = javax.swing.JOptionPane.showInputDialog("Введите имя листа:");
+                manager.loadExcelSheetByName(selectedFilePath, sheetName);
+                System.out.println("Выбранный файл: " + selectedFilePath + ", имя листа: " + sheetName);
+            }
         } else {
             System.out.println("Отменено");
         }
-
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void showButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showButtonActionPerformed
@@ -140,15 +181,26 @@ public class MainFrame extends javax.swing.JFrame {
         exit(0);
     }//GEN-LAST:event_exitButtonActionPerformed
 
+    private void radioIndexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIndexActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioIndexActionPerformed
+
+    private void radioNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioNameActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton calculateButton;
     private javax.swing.JButton exitButton;
     private javax.swing.JButton exportButton;
     private javax.swing.JButton loadButton;
+    private javax.swing.JRadioButton radioIndex;
+    private javax.swing.JRadioButton radioName;
     private javax.swing.JButton showButton;
     // End of variables declaration//GEN-END:variables
 }

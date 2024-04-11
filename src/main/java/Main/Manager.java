@@ -7,20 +7,22 @@ import calculations.*;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class Manager {
 
-    private final Storage storage;
-    private final ExcelReader excelReader;
-    private String selectedFilePath; // New class variable to store the selected file path
+    private Storage storage;
+    private ExcelReader excelReader;
+    private String selectedFilePath;
 
     public Manager() {
         this.storage = new Storage();
         this.excelReader = new ExcelReader();
     }
 
-    public void performCalculations() {
+ public void performCalculations() {
         Stat_Calc[] calculators = {
             new Geometric_Mean_Calculator(),
             new Arithmetic_Mean_Calculator(),
@@ -35,25 +37,18 @@ public class Manager {
 
         for (Stat_Calc calculator : calculators) {
             storage.setStatCalc(calculator);
-            storage.performCalculations();
+            try {
+                storage.performCalculations();
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(null, "Empty list in calculations: " + e.getMessage(), "Calculation Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
-    public void loadExcelFile(String path) {
-        excelReader.setFile(path);
-        try {
-            excelReader.loadFile();
-            storage.setExcelLists(excelReader.readFile());
-        } catch (IOException | InvalidFormatException e) {
-            System.err.println("Error processing Excel file: " + e.getMessage());
-        }
-
-    }
 
     public void exportToExcel(String filePath) {
         ExcelExport excelExport = new ExcelExport(storage);
         excelExport.exportToExcel(filePath);
-        // Store the selected file path for use in showResultsFile
         selectedFilePath = filePath;
     }
 
@@ -64,18 +59,44 @@ public class Manager {
                 if (file.exists()) {
                     Desktop.getDesktop().open(file);
                 } else {
-                    System.out.println("Файл не найден");
+                    JOptionPane.showMessageDialog(null, "File not found", "File Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (IOException e) {
-                System.out.println("Ошибка при открытии файла: " + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Error opening the file: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
             } catch (IllegalArgumentException e) {
-                System.out.println("Некорректный аргумент: " + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Invalid argument: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             } catch (UnsupportedOperationException e) {
-                System.out.println("Операция не поддерживается: " + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Operation not supported: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            System.out.println("Файл не был выбран для экспорта");
+            JOptionPane.showMessageDialog(null, "No file selected for export", "File Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    public void loadExcelSheetByIndex(String filePath, int sheetIndex) {
+        excelReader.setFile(filePath);
+        try {
+            excelReader.loadFile();
+            ArrayList<ArrayList<Double>> excelData = excelReader.readSheetByIndex(sheetIndex);
+
+            if (sheetIndex < excelData.size()) { // Check if there is data for the specified index
+                storage.setExcelLists(excelData);
+            } else {
+                JOptionPane.showMessageDialog(null, "Index out of bounds: " + sheetIndex, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (IOException | InvalidFormatException e) {
+            System.err.println("Error processing Excel file: " + e.getMessage());
+        }
+    
+    }
+
+    public void loadExcelSheetByName(String filePath, String sheetName) {
+        excelReader.setFile(filePath);
+        try {
+            excelReader.loadFile();
+            storage.setExcelLists(excelReader.readSheetByName(sheetName));
+        } catch (IOException | InvalidFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error processing Excel file: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

@@ -11,11 +11,13 @@ Main\MainFrame$3.class
 Excel\Storage.class
 calculations\Covariance_Calculator.class
 calculations\Extremum_Calculator.class
+Main\MainFrame$7.class
 calculations\Stat_Calc.class
 Main\MainFrame$2.class
 calculations\Variation_Calculator.class
 Excel\ExcelExport.class
 calculations\Range_Calculator.class
+Main\MainFrame$6.class
 calculations\Arithmetic_Mean_Calculator.class
 Main\Manager.class
 calculations\Variance_Calculator.class
