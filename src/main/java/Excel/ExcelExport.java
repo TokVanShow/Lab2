@@ -42,7 +42,6 @@ public class ExcelExport {
     public void writeResultsToFirstSheet(Sheet sheet) {
         Row firstRow = sheet.createRow(0);
         for (int i = 0; i < excelLists.size(); i++) {
-            System.out.println("excelLists = " + excelLists);
             Cell cell = firstRow.createCell(i + 1);
             cell.setCellValue("Sample_" + (i + 1));
         }
