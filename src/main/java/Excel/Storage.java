@@ -3,17 +3,16 @@ package Excel;
 import calculations.Stat_Calc;
 import java.util.ArrayList;
 
-
 public class Storage {
 
-    public ArrayList<ArrayList<Double>> excelLists;
+    private ArrayList<ArrayList<Double>> excelLists;
     private Stat_Calc calculationStrategy;
     private final ArrayList<Double> calculationResults;
 
     public Storage() {
-        this.excelLists = new ArrayList<>();
-        this.calculationStrategy = null;
-        this.calculationResults = new ArrayList<>();
+        excelLists = new ArrayList<>();
+        calculationStrategy = null;
+        calculationResults = new ArrayList<>();
     }
 
     public ArrayList<ArrayList<Double>> getExcelLists() {
@@ -34,18 +33,12 @@ public class Storage {
             return;
         }
 
-        ArrayList<Double>[] samples = new ArrayList[excelLists.size()];
-
-        for (int i = 0; i < excelLists.size(); i++) {
-            samples[i] = excelLists.get(i);
+        for (ArrayList<Double> sample : excelLists) {
+            double[] results = calculationStrategy.stat_Calc(sample);
+            for (double result : results) {
+                calculationResults.add(result);
+            }
         }
-
-        double[] currentResults = calculationStrategy.stat_Calc(samples);
-
-        for (double result : currentResults) {
-            calculationResults.add(result);
-        }
-        System.out.println("");
     }
 
     public ArrayList<Double> getCalculationResults() {
