@@ -32,10 +32,12 @@ public class ExcelExport {
 
             try (FileOutputStream fileOut = new FileOutputStream(new File(filePath))) {
                 workbook.write(fileOut);
+                System.out.println("Excel file exported successfully!");
+            } catch (IOException e) {
+                System.err.println("Error exporting Excel file: " + e.getMessage());
             }
-            System.out.println("Excel file exported successfully!");
         } catch (IOException e) {
-            System.err.println("Error exporting Excel file: " + e.getMessage());
+            System.err.println("Error creating Excel workbook: " + e.getMessage());
         }
     }
 
@@ -67,7 +69,7 @@ public class ExcelExport {
     }
 
     private void writeCovarianceMatrixToSheet(Stat_Calc covarianceCalculator, Sheet sheet) {
-        {
+        try {
             double[] covarianceValues = covarianceCalculator.stat_Calc(excelLists.toArray(ArrayList[]::new));
             int matrixSize = (int) Math.sqrt(covarianceValues.length);
 
@@ -87,8 +89,9 @@ public class ExcelExport {
                     cell.setCellValue(covarianceValues[i * matrixSize + j]);
                 }
             }
-
             autoSizeColumns(sheet, matrixSize + 1); // Increase the column count for the labels
+        } catch (Exception e) {
+            System.err.println("Error writing covariance matrix to Excel: " + e.getMessage());
         }
     }
 

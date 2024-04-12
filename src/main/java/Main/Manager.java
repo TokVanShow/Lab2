@@ -22,7 +22,7 @@ public class Manager {
         this.excelReader = new ExcelReader();
     }
 
- public void performCalculations() {
+    public void performCalculations() {
         Stat_Calc[] calculators = {
             new Geometric_Mean_Calculator(),
             new Arithmetic_Mean_Calculator(),
@@ -37,14 +37,9 @@ public class Manager {
 
         for (Stat_Calc calculator : calculators) {
             storage.setStatCalc(calculator);
-            try {
-                storage.performCalculations();
-            } catch (IllegalArgumentException e) {
-                JOptionPane.showMessageDialog(null, "Empty list in calculations: " + e.getMessage(), "Calculation Error", JOptionPane.ERROR_MESSAGE);
-            }
+            storage.performCalculations();
         }
     }
-
 
     public void exportToExcel(String filePath) {
         ExcelExport excelExport = new ExcelExport(storage);
@@ -59,35 +54,31 @@ public class Manager {
                 if (file.exists()) {
                     Desktop.getDesktop().open(file);
                 } else {
-                    JOptionPane.showMessageDialog(null, "File not found", "File Error", JOptionPane.ERROR_MESSAGE);
+                    showErrorMessage("Файл не найден");
                 }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error opening the file: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
-            } catch (IllegalArgumentException e) {
-                JOptionPane.showMessageDialog(null, "Invalid argument: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (UnsupportedOperationException e) {
-                JOptionPane.showMessageDialog(null, "Operation not supported: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException | IllegalArgumentException | UnsupportedOperationException e) {
+                showErrorMessage("Ошибка открытия файла: " + e.getMessage());
             }
         } else {
-            JOptionPane.showMessageDialog(null, "No file selected for export", "File Error", JOptionPane.ERROR_MESSAGE);
+            showErrorMessage("Для экспорта не выбран файл");
         }
     }
 
     public void loadExcelSheetByIndex(String filePath, int sheetIndex) {
-        excelReader.setFile(filePath);
         try {
+            excelReader.setFile(filePath);
             excelReader.loadFile();
-            ArrayList<ArrayList<Double>> excelData = excelReader.readSheetByIndex(sheetIndex);
+            int totalSheets = excelReader.getTotalSheets();
 
-            if (sheetIndex < excelData.size()) { // Check if there is data for the specified index
+            if (sheetIndex >= 0 && sheetIndex < totalSheets) {
+                ArrayList<ArrayList<Double>> excelData = excelReader.readSheetByIndex(sheetIndex);
                 storage.setExcelLists(excelData);
             } else {
-                JOptionPane.showMessageDialog(null, "Index out of bounds: " + sheetIndex, "Error", JOptionPane.ERROR_MESSAGE);
+                showErrorMessage("Недопустимый номер листа: " + sheetIndex);
             }
         } catch (IOException | InvalidFormatException e) {
-            System.err.println("Error processing Excel file: " + e.getMessage());
+            showErrorMessage("Ошибка обработки файла Excel: " + e.getMessage());
         }
-    
     }
 
     public void loadExcelSheetByName(String filePath, String sheetName) {
@@ -96,7 +87,33 @@ public class Manager {
             excelReader.loadFile();
             storage.setExcelLists(excelReader.readSheetByName(sheetName));
         } catch (IOException | InvalidFormatException e) {
-            JOptionPane.showMessageDialog(null, "Error processing Excel file: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
+            showErrorMessage("Ошибка обработки файла Excel: " + e.getMessage());
         }
     }
+
+    public void handleIndexSelection(String selectedFilePath, String input) {
+        if (input != null && !input.isEmpty()) {
+            try {
+                int sheetIndex = Integer.parseInt(input);
+                loadExcelSheetByIndex(selectedFilePath, sheetIndex);
+            } catch (NumberFormatException e) {
+                showErrorMessage("Введите корректное число для номера листа.");
+            }
+        } else {
+            showErrorMessage("Ошибка: Номер листа не введен.");
+        }
+    }
+
+    public void handleNameSelection(String selectedFilePath, String sheetName) {
+        if (sheetName != null && !sheetName.isEmpty()) {
+            loadExcelSheetByName(selectedFilePath, sheetName);
+        } else {
+            showErrorMessage("Ошибка: Имя листа не введено.");
+        }
+    }
+
+    public void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.ERROR_MESSAGE);
+    }
+
 }

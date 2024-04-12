@@ -4,6 +4,7 @@ import java.io.File;
 import static java.lang.System.exit;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -70,7 +71,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        radioIndex.setText("По индексу листа");
+        radioIndex.setText("По номеру листа");
         radioIndex.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 radioIndexActionPerformed(evt);
@@ -133,48 +134,66 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
-        manager.performCalculations();
+        try {
+            manager.performCalculations();
+        } catch (Exception e) {
+            manager.showErrorMessage("Ошибка при выполнении расчетов: " + e.getMessage());
+        }
+
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
-        int result = fileChooser.showSaveDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            String filePath = selectedFile.getAbsolutePath();
-            // Ensure the file extension is .xlsx
-            if (!filePath.toLowerCase().endsWith(".xlsx")) {
-                filePath += ".xlsx";
+        try {
+            int result = fileChooser.showSaveDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String filePath = selectedFile.getAbsolutePath();
+                if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                    filePath += ".xlsx";
+                }
+                manager.exportToExcel(filePath);
+            } else {
+                JOptionPane.showMessageDialog(this, "Отменено", "Информация", JOptionPane.INFORMATION_MESSAGE);
             }
-            manager.exportToExcel(filePath);
-        } else {
-            System.out.println("Отменено");
+        } catch (Exception e) {
+            manager.showErrorMessage("Ошибка при экспорте результатов: " + e.getMessage());
         }
-
     }//GEN-LAST:event_exportButtonActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            String selectedFilePath = selectedFile.getAbsolutePath();
-            if (radioIndex.isSelected()) {
-                String input = javax.swing.JOptionPane.showInputDialog("Введите индекс листа:");
-                int sheetIndex = Integer.parseInt(input);
-                manager.loadExcelSheetByIndex(selectedFilePath, sheetIndex);
-                System.out.println("Выбранный файл: " + selectedFilePath + ", индекс листа: " + sheetIndex);
+        try {
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String selectedFilePath = selectedFile.getAbsolutePath();
+
+                if (selectedFile.exists()) {
+                    if (radioIndex.isSelected()) {
+                        String input = JOptionPane.showInputDialog("Введите номер листа:");
+                        manager.handleIndexSelection(selectedFilePath, input);
+                    } else if (radioName.isSelected()) {
+                        String sheetName = JOptionPane.showInputDialog("Введите имя листа:");
+                        manager.handleNameSelection(selectedFilePath, sheetName);
+                    } else {
+                        manager.showErrorMessage("Ошибка: Радиокнопка не выбрана.");
+                    }
+                } else {
+                    manager.showErrorMessage("Файл не существует.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Отменено", "Информация", JOptionPane.INFORMATION_MESSAGE);
             }
-            if (radioName.isSelected()) {
-                String sheetName = javax.swing.JOptionPane.showInputDialog("Введите имя листа:");
-                manager.loadExcelSheetByName(selectedFilePath, sheetName);
-                System.out.println("Выбранный файл: " + selectedFilePath + ", имя листа: " + sheetName);
-            }
-        } else {
-            System.out.println("Отменено");
+        } catch (Exception e) {
+            manager.showErrorMessage("Ошибка при загрузке файла: " + e.getMessage());
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void showButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showButtonActionPerformed
-        manager.showResultsFile();
+        try {
+            manager.showResultsFile();
+        } catch (Exception e) {
+            manager.showErrorMessage("Ошибка при открытии файла: " + e.getMessage());
+        }
     }//GEN-LAST:event_showButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed

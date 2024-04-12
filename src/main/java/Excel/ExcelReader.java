@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.swing.JOptionPane;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -35,18 +36,17 @@ public class ExcelReader {
     }
 
     public ArrayList<ArrayList<Double>> readSheetByIndex(int sheetIndex) {
-        XSSFSheet sheet = workbook.getSheetAt(sheetIndex-1);
+        XSSFSheet sheet = workbook.getSheetAt(sheetIndex - 1);
         return readSheet(sheet);
     }
 
     public ArrayList<ArrayList<Double>> readSheetByName(String sheetName) {
         XSSFSheet sheet = workbook.getSheet(sheetName);
         if (sheet == null) {
-            System.out.println("The Excel sheet with name " + sheetName + " does not exist");
+            JOptionPane.showMessageDialog(null, "Ошибка: Лист Excel с именем " + sheetName + " не существует", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return new ArrayList<>();
         }
         return readSheet(sheet);
-        
     }
 
     public ArrayList<ArrayList<Double>> readSheet(XSSFSheet sheet) {
@@ -86,5 +86,12 @@ public class ExcelReader {
         System.out.println("");
 
         return columns;
+    }
+
+    public int getTotalSheets() {
+        if (workbook != null) {
+            return workbook.getNumberOfSheets();
+        }
+        return 0;
     }
 }
