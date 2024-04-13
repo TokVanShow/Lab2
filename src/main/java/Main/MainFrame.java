@@ -137,7 +137,7 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             manager.performCalculations();
         } catch (Exception e) {
-            manager.showErrorMessage("Ошибка при выполнении расчетов: " + e.getMessage());
+            showErrorMessage("Ошибка при выполнении расчетов: " + e.getMessage());
         }
 
     }//GEN-LAST:event_calculateButtonActionPerformed
@@ -156,7 +156,7 @@ public class MainFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Отменено", "Информация", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
-            manager.showErrorMessage("Ошибка при экспорте результатов: " + e.getMessage());
+            showErrorMessage("Ошибка при экспорте результатов: " + e.getMessage());
         }
     }//GEN-LAST:event_exportButtonActionPerformed
 
@@ -175,16 +175,16 @@ public class MainFrame extends javax.swing.JFrame {
                         String sheetName = JOptionPane.showInputDialog("Введите имя листа:");
                         manager.handleNameSelection(selectedFilePath, sheetName);
                     } else {
-                        manager.showErrorMessage("Ошибка: Радиокнопка не выбрана.");
+                        showErrorMessage("Ошибка: Радиокнопка не выбрана.");
                     }
                 } else {
-                    manager.showErrorMessage("Файл не существует.");
+                    showErrorMessage("Файл не существует.");
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Отменено", "Информация", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
-            manager.showErrorMessage("Ошибка при загрузке файла: " + e.getMessage());
+            showErrorMessage("Ошибка при загрузке файла: " + e.getMessage());
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
@@ -192,7 +192,7 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             manager.showResultsFile();
         } catch (Exception e) {
-            manager.showErrorMessage("Ошибка при открытии файла: " + e.getMessage());
+            showErrorMessage("Ошибка при открытии файла: " + e.getMessage());
         }
     }//GEN-LAST:event_showButtonActionPerformed
 
@@ -208,6 +208,9 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_radioNameActionPerformed
 
+    private void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, "Ошибка", JOptionPane.ERROR_MESSAGE);
+    }
     /**
      * @param args the command line arguments
      */

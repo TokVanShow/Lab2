@@ -1,5 +1,6 @@
 package Excel;
 
+import Main.Calculator;
 import calculations.Stat_Calc;
 import java.util.ArrayList;
 
@@ -27,18 +28,23 @@ public class Storage {
         this.calculationStrategy = calculationStrategy;
     }
 
-    public void performCalculations() {
-        if (calculationStrategy == null) {
-            System.out.println("Error: Calculation strategy not set.");
-            return;
+//    public void performCalculations(Calculator calculator) {
+//        calculator.performCalc(this);
+//    }
+    public void storeResults(double[] currentResults) {
+        for (double result : currentResults) {
+            calculationResults.add(result);
+        }
+    }
+
+    public ArrayList<Double>[] getData() {
+        ArrayList<Double>[] samples = new ArrayList[excelLists.size()];
+
+        for (int i = 0; i < excelLists.size(); i++) {
+            samples[i] = excelLists.get(i);
         }
 
-        for (ArrayList<Double> sample : excelLists) {
-            double[] results = calculationStrategy.stat_Calc(sample);
-            for (double result : results) {
-                calculationResults.add(result);
-            }
-        }
+        return samples;
     }
 
     public ArrayList<Double> getCalculationResults() {

@@ -23,6 +23,8 @@ public class Manager {
     }
 
     public void performCalculations() {
+        Calculator calculator = new Calculator();
+
         Stat_Calc[] calculators = {
             new Geometric_Mean_Calculator(),
             new Arithmetic_Mean_Calculator(),
@@ -35,13 +37,14 @@ public class Manager {
             new Extremum_Calculator()
         };
 
-        for (Stat_Calc calculator : calculators) {
-            storage.setStatCalc(calculator);
-            storage.performCalculations();
+        for (Stat_Calc currentCalculator : calculators) {
+            calculator.setCalculationStrategy(currentCalculator);
+            calculator.performCalc(storage);
         }
     }
 
-    public void exportToExcel(String filePath) {
+
+public void exportToExcel(String filePath) {
         ExcelExport excelExport = new ExcelExport(storage);
         excelExport.exportToExcel(filePath);
         selectedFilePath = filePath;
