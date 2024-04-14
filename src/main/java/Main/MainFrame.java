@@ -11,7 +11,6 @@ public class MainFrame extends javax.swing.JFrame {
     JFileChooser fileChooser;
     private final Manager manager;
     private ButtonGroup radioGroup;
-    private String selectedFilePath;
 
     public MainFrame() {
         initComponents();
@@ -162,14 +161,13 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_exportButtonActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            this.selectedFilePath = selectedFile.getAbsolutePath();
+        try {
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String selectedFilePath = selectedFile.getAbsolutePath();
 
-            if (selectedFile.exists()) {
-                // Проверка формата файла
-                if (selectedFile.getName().endsWith(".xlsx")) {
+                if (selectedFile.exists()) {
                     if (radioIndex.isSelected()) {
                         String input = JOptionPane.showInputDialog("Введите номер листа:");
                         manager.handleIndexSelection(selectedFilePath, input);
@@ -180,13 +178,13 @@ public class MainFrame extends javax.swing.JFrame {
                         showErrorMessage("Ошибка: Радиокнопка не выбрана.");
                     }
                 } else {
-                    showErrorMessage("Ошибка: Неподдерживаемый формат файла. Пожалуйста, выберите файл в формате .xlsx");
+                    showErrorMessage("Файл не существует.");
                 }
             } else {
-                showErrorMessage("Файл не существует.");
+                JOptionPane.showMessageDialog(this, "Отменено", "Информация", JOptionPane.INFORMATION_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Отменено", "Информация", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            showErrorMessage("Ошибка при загрузке файла: " + e.getMessage());
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
